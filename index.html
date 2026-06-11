@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>پرونده هدیه 💙</title>
+
+<style>
+body{
+margin:0;
+font-family:tahoma;
+background:#050814;
+color:white;
+display:flex;
+justify-content:center;
+}
+
+.card{
+width:95%;
+max-width:520px;
+margin-top:20px;
+background:rgba(255,255,255,0.06);
+padding:15px;
+border-radius:12px;
+height:90vh;
+overflow:auto;
+}
+
+.msg{
+background:rgba(255,255,255,0.08);
+padding:10px;
+margin:6px 0;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:8px;
+background:#1f2a55;
+color:white;
+}
+
+button.sel{background:#3b82f6}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="app"></div>
+
+<script>
+
+let data = {};
+let finalPick = [];
+
+/* پیام */
+function add(t){
+let d=document.createElement("div");
+d.className="msg";
+d.innerText=t;
+document.getElementById("app").appendChild(d);
+}
+
+/* تایپ */
+function typeText(text,cb){
+let i=0;
+let el=document.createElement("div");
+el.className="msg";
+document.getElementById("app").appendChild(el);
+
+let t=setInterval(()=>{
+el.innerText=text.substring(0,i);
+i++;
+if(i>text.length){
+clearInterval(t);
+setTimeout(cb,250);
+}
+},15);
+}
+
+/* شروع */
+function start(){
+document.getElementById("app").innerHTML="";
+
+typeText("💙 برای علیرضا...",()=>{
+typeText("تو دلیل ساختن این لحظه‌ای ✨",()=>{
+stepCar();
+});
+});
+}
+
+/* مراحل */
+function stepCar(){
+multi("car","🚗 ماشین",[
+"روکش صندلی خودرو",
+"روکش فرمان خودرو",
+"لوازم جانبی خودرو",
+"اگزوز اسپرت"
+],()=>detailStep("car",stepWork));
+}
+
+function stepWork(){
+multi("work","💈 وسایل کار",[
+"ماشین اصلاح",
+"خط زن",
+"کیف ابزار",
+"براش اصلاح"
+],()=>detailStep("work",stepStyle));
+}
+
+function stepStyle(){
+multi("style","👕 استایل",[
+"تیشرت",
+"شلوار",
+"لباس رسمی"
+],()=>detailStep("style",stepAcc));
+}
+
+function stepAcc(){
+multi("acc","⌚ اکسسوری",[
+"ساعت",
+"دستبند",
+"گردنبند",
+"عینک"
+],()=>detailStep("acc",stepPerfume));
+}
+
+function stepPerfume(){
+multi("perfume","🌸 عطر",[
+"خنک",
+"گرم",
+"شیرین",
+"تلخ"
+],()=>detailStep("perfume",stepFun));
+}
+
+function stepFun(){
+multi("fun","💫 تفریح دو نفره",[
+"طبیعت گردی",
+"سفر کوتاه",
+"تفریح هیجانی",
+"گردش شهری"
+],()=>detailStep("fun",stepGift));
+}
+
+function stepGift(){
+multi("gift","🎁 هدیه ویژه",[
+"تجربه دو نفره یک شب خاص",
+"فندک",
+"سیگار خاص",
+"پول نقد"
+],()=>detailStep("gift",finish));
+}
+
+/* انتخاب */
+function multi(key,title,options,next){
+
+add("👉 "+title);
+
+if(!data[key]) data[key]=[];
+
+let wrap=document.createElement("div");
+
+options.forEach(opt=>{
+let b=document.createElement("button");
+b.innerText=opt;
+
+b.onclick=()=>{
+
+let arr=data[key];
+
+if(arr.includes(opt)){
+arr.splice(arr.indexOf(opt),1);
+b.classList.remove("sel");
+}else{
+arr.push(opt);
+b.classList.add("sel");
+}
+
+};
+
+wrap.appendChild(b);
+});
+
+let btn=document.createElement("button");
+btn.innerText="ادامه";
+btn.style.background="#3b82f6";
+btn.onclick=next;
+
+wrap.appendChild(btn);
+
+document.getElementById("app").appendChild(wrap);
+}
+
+/* جزئیات */
+function detailStep(key,next){
+
+let items=data[key];
+if(!items || items.length===0){
+next();
+return;
+}
+
+const map={
+"روکش صندلی خودرو":["چرم طبیعی","دوخت صنعتی","قابل شستشو","فابریک"],
+"روکش فرمان خودرو":["چرم ضدلغزش","دوخت دستی","جذب تعریق","مقاوم"],
+"لوازم جانبی خودرو":["هولدر","دوربین","جارو شارژی","بوگیر"],
+"اگزوز اسپرت":["صدای اسپرت","استیل","ظاهر خاص","نصب آسان"],
+
+"ماشین اصلاح":["تیغه استیل","باتری قوی","صفر زن","کم صدا"],
+"خط زن":["تیغه T","دقیق","موتور قوی","سبک"],
+"کیف ابزار":["محفظه دار","ضدضربه","زیپ قوی","قابل حمل"],
+"براش اصلاح":["نرم","ضدحساسیت","پخش یکنواخت","قابل شستشو"],
+
+"تیشرت":["نخ پنبه","تنفس‌پذیر","راحت","روزمره"],
+"شلوار":["مقاوم","راحت","دوخت صنعتی","بادوام"],
+"لباس رسمی":["شیک","پارچه باکیفیت","مجلسی","رسمی"],
+
+"ساعت":["دقیق","ضدخش","شیک","بند چرمی"],
+"دستبند":["چرم","استیل","ساده","محکم"],
+"گردنبند":["سبک","زنجیر","ساده","استایل"],
+"عینک":["UV","سبک","مدرن","محافظ"],
+
+"خنک":["مرکباتی","سبک","تابستانی","انرژی‌بخش"],
+"گرم":["چوبی","سنگین","زمستانی","ماندگار"],
+"شیرین":["وانیلی","لطیف","جذاب","ملایم"],
+"تلخ":["چوبی","سنگین","رسمی","قوی"],
+
+"طبیعت گردی":["آرام","هوای آزاد","دونفره","خاطره"],
+"سفر کوتاه":["۱-۲ روز","استراحت","تجربه جدید","خاطره"],
+"تفریح هیجانی":["آدرنالین","هیجان","خاص","انرژی"],
+"گردش شهری":["قدم زدن","شهر","آرامش","دونفره"],
+
+"تجربه دو نفره یک شب خاص":["شب خصوصی","رمانتیک","آرامش","خاطره‌ساز"],
+"فندک":["فلزی","خاص","بادوام","شارژی"],
+"سیگار خاص":["برند خاص","طعم متفاوت","ویژه","محدود"],
+"پول نقد":["آزاد","انعطاف","کاربردی","بدون محدودیت"]
+};
+
+let i=0;
+
+function run(){
+
+if(i>=items.length){
+next();
+return;
+}
+
+let opt=items[i];
+
+typeText("👉 "+opt,()=>{
+
+let det=map[opt] || [];
+
+if(det.length===0){
+i++;
+run();
+return;
+}
+
+selectDetails(opt,det,(picked)=>{
+i++;
+run();
+});
+
+});
+
+}
+
+run();
+}
+
+/* جزئیات انتخابی */
+function selectDetails(title,options,cb){
+
+let selected=[];
+
+add("✨ جزئیات: "+title);
+
+let wrap=document.createElement("div");
+
+options.forEach(op=>{
+
+let b=document.createElement("button");
+b.innerText=op;
+
+b.onclick=()=>{
+
+if(selected.includes(op)){
+selected.splice(selected.indexOf(op),1);
+b.classList.remove("sel");
+}else{
+selected.push(op);
+b.classList.add("sel");
+}
+
+};
+
+wrap.appendChild(b);
+});
+
+let btn=document.createElement("button");
+btn.innerText="تایید جزئیات";
+btn.style.background="#3b82f6";
+btn.onclick=()=>cb(selected);
+
+wrap.appendChild(btn);
+
+document.getElementById("app").appendChild(wrap);
+}
+
+/* 💙 جمع‌بندی اصلاح‌شده نهایی */
+function finish(){
+
+typeText("💙 جمع‌بندی نهایی برای علیرضا...",()=>{
+
+let allSelected = [];
+
+add("✨ همه انتخاب‌هایی که تا اینجا کردی:");
+
+for(let k in data){
+if(data[k] && data[k].length > 0){
+
+add("━━━━━━━━━━━━");
+add("📌 "+k);
+
+data[k].forEach(item=>{
+add("• "+item);
+allSelected.push(item);
+});
+
+}
+}
+
+add("");
+add("💙 حالا از بین همه انتخاب‌هات فقط ۳ تا رو انتخاب کن 👇");
+
+let finalPick=[];
+
+let wrap=document.createElement("div");
+
+allSelected.forEach(item=>{
+
+let b=document.createElement("button");
+b.innerText=item;
+
+b.onclick=()=>{
+
+if(finalPick.includes(item)){
+finalPick.splice(finalPick.indexOf(item),1);
+b.classList.remove("sel");
+}else{
+if(finalPick.length>=3) return;
+finalPick.push(item);
+b.classList.add("sel");
+}
+
+};
+
+wrap.appendChild(b);
+});
+
+let btn=document.createElement("button");
+btn.innerText="تایید نهایی 💙";
+btn.style.background="#3b82f6";
+btn.onclick=()=>finalMsg(finalPick);
+
+wrap.appendChild(btn);
+
+document.getElementById("app").appendChild(wrap);
+
+});
+}
+
+/* 💙 پایان عاشقانه */
+function finalMsg(picks){
+
+add("💙 در حال ساخت انتخاب نهایی برای علیرضا...");
+
+setTimeout(()=>{
+
+add("━━━━━━━━━━━━");
+add("💙 ۳ انتخاب نهایی تو:");
+
+picks.forEach(x=>{
+add("✨ "+x);
+});
+
+add("━━━━━━━━━━━━");
+add("💙 ممنون که کمک کردی یه انتخاب خوب برات داشته باشم ✨");
+add("امیدوارم همونی بشه که دلت می‌خواد ❤️");
+add("عاشقتم 💙");
+
+},600);
+}
+
+start();
+
+</script>
+</body>
+</html>
